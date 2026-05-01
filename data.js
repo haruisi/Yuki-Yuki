@@ -34,7 +34,10 @@ window.compounds = [
   { id: "cumene", name: "クメン", formula: "C6H5CH(CH3)2", group: "芳香族炭化水素", summary: "ベンゼンにプロピレンを付加して得られる。クメン法でフェノールとアセトンの原料になる。" },  
   { id: "acetone", name: "アセトン", formula: "CH3COCH3", group: "ケトン", summary: "クメン法でフェノールとともに生じる。芳香族化合物ではないが、生成物として出る。" },  
   { id: "azo_phenol", name: "p-ヒドロキシアゾベンゼン", formula: "C6H5N=NC6H4OH", group: "アゾ化合物", summary: "ジアゾニウム塩とフェノールのカップリングで生じる代表的なアゾ化合物。" },  
-  { id: "azo_aniline", name: "p-アミノアゾベンゼン", formula: "C6H5N=NC6H4NH2", group: "アゾ化合物", summary: "ジアゾニウム塩とアニリンのカップリングで生じる代表的なアゾ化合物。" }  
+  { id: "azo_aniline", name: "p-アミノアゾベンゼン", formula: "C6H5N=NC6H4NH2", group: "アゾ化合物", summary: "ジアゾニウム塩とアニリンのカップリングで生じる代表的なアゾ化合物。" },
+  { id: "acetophenone", name: "アセトフェノン", formula: "C6H5COCH3", group: "芳香族ケトン", summary: "ベンゼン環にアセチル基 COCH3 がついた芳香族ケトン。ベンゼンのFriedel-Craftsアシル化で得られる。" },
+  { id: "cyclohexane", name: "シクロヘキサン", formula: "C6H12", group: "シクロアルカン", summary: "ベンゼンに水素を付加して得られる飽和環状炭化水素。芳香族性はない。" },
+  { id: "benzene_hexachloride", name: "ベンゼンヘキサクロリド", formula: "C6H6Cl6", group: "塩素付加物", summary: "ベンゼンに塩素を付加して得られる化合物。ベンゼン環の芳香族性は失われる。" }
 ];  
   
 window.reactions = [  
@@ -90,5 +93,8 @@ window.reactions = [
   { from: "benzoic_acid", to: "methyl_benzoate", type: "エステル化", name: "エステル化", reagent: "メタノール + 濃硫酸", point: "安息香酸のカルボキシ基がメチルエステルになる。", exam: "カルボン酸 + アルコール → エステル。" },  
   { from: "methyl_benzoate", to: "sodium_benzoate", type: "加水分解", name: "エステルのけん化", reagent: "NaOH水溶液、加熱", point: "安息香酸メチルが加水分解され、安息香酸ナトリウムとメタノールを生じる。", exam: "エステル化の逆向きとして重要。" },  
   { from: "o_xylene", to: "phthalic_acid", type: "酸化", name: "側鎖の酸化", reagent: "KMnO4 など", point: "2つのメチル基がそれぞれ -COOH まで酸化される。", exam: "o-キシレン → フタル酸。異性体対応を覚える。" },  
-  { from: "p_xylene", to: "terephthalic_acid", type: "酸化", name: "側鎖の酸化", reagent: "KMnO4 など", point: "2つのメチル基がそれぞれ -COOH まで酸化される。", exam: "p-キシレン → テレフタル酸。PETとの関連でも出る。" }  
+  { from: "p_xylene", to: "terephthalic_acid", type: "酸化", name: "側鎖の酸化", reagent: "KMnO4 など", point: "2つのメチル基がそれぞれ -COOH まで酸化される。", exam: "p-キシレン → テレフタル酸。PETとの関連でも出る。" },
+  { from: "benzene", to: "acetophenone", type: "アシル化", name: "Friedel-Crafts アシル化", reagent: "CH3COCl + AlCl3", point: "ベンゼン環のHがアシル基 COCH3 に置き換わる。", exam: "アルキル化とセットで、ベンゼン環への置換反応として整理する。" },
+  { from: "benzene", to: "cyclohexane", type: "付加", name: "水素付加", reagent: "H2、Niなどの触媒、高温・高圧", point: "ベンゼン環に水素が付加して、シクロヘキサンになる。", exam: "ベンゼンの通常反応は置換が中心だが、強い条件では付加反応も起こる。" },
+  { from: "benzene", to: "benzene_hexachloride", type: "付加", name: "塩素付加", reagent: "Cl2、光", point: "ベンゼンに塩素が付加して、ベンゼンヘキサクロリドになる。", exam: "Cl2 + FeCl3 は置換、Cl2 + 光 は付加として区別する。" }
 ];  

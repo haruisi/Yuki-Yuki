@@ -71,10 +71,12 @@ function typeClass(type) {
     "置換": "type-substitution",  
     "酸塩基": "type-acidbase",  
     "エステル化": "type-esterification",  
-    "アセチル化": "type-acetylation",  
+    "アセチル化": "type-acetylation",
+    "アシル化": "type-acetylation",  
     "加水分解": "type-hydrolysis",  
     "確認反応": "type-confirmation",  
-    "ジアゾカップリング": "type-coupling"  
+    "ジアゾカップリング": "type-coupling",
+    "付加": "type-addition"  
   };  
   
   return map[type] || "type-substitution";  

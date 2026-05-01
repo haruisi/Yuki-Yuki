@@ -214,10 +214,41 @@ const structureSpecs = {
     { position: 0, label: "COOH", small: true },  
     { position: 3, label: "COOH", small: true }  
   ],  
-  cumene: [{ position: 0, label: "CH(CH₃)₂", small: true }]  
+  cumene: [{ position: 0, label: "CH(CH₃)₂", small: true }],
+  acetophenone: [{ position: 0, label: "COCH₃", small: true }]  
 };  
   
+
+function cyclohexaneSVG() {
+  return `
+    <svg width="360" height="260" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg">
+      ${structureStyle()}
+      <polygon points="180,55 245,92 245,168 180,205 115,168 115,92" class="svg-bond" />
+      <text x="180" y="235" text-anchor="middle" class="svg-caption">シクロヘキサン：C₆H₁₂</text>
+    </svg>
+  `;
+}
+
+function benzeneHexachlorideSVG() {
+  return `
+    <svg width="360" height="260" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg">
+      ${structureStyle()}
+      <polygon points="180,55 245,92 245,168 180,205 115,168 115,92" class="svg-bond" />
+      <text x="180" y="34" text-anchor="middle" class="svg-atom-small">Clが6個付加</text>
+      <text x="180" y="235" text-anchor="middle" class="svg-caption">ベンゼンヘキサクロリド：C₆H₆Cl₆</text>
+    </svg>
+  `;
+}
+
 window.getStructureSVG = function getStructureSVG(compoundId) {  
+  if (compoundId === "cyclohexane") {
+    return cyclohexaneSVG();
+  }
+
+  if (compoundId === "benzene_hexachloride") {
+    return benzeneHexachlorideSVG();
+  }
+
   if (compoundId === "acetone") {  
     return acetoneSVG();  
   }  

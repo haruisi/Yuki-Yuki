@@ -331,6 +331,10 @@ button.good {
   background: var(--pink);
 }
 
+.type-addition::before {
+  background: #0891b2;
+}
+
 .reaction-head {
   display: flex;
   flex-wrap: wrap;
