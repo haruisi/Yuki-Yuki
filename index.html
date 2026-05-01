@@ -1,0 +1,126 @@
+<!DOCTYPE html>  
+<html lang="ja">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <title>芳香族化合物 反応ルート</title>  
+  <link rel="stylesheet" href="style.css" />  
+</head>  
+  
+<body>  
+  <header>  
+    <h1>芳香族化合物 反応ルート</h1>  
+    <p>  
+      物質を選ぶと、その物質から進める反応だけを表示します。  
+      構造決定問題モードでは、登録済み反応データからランダム問題を生成します。  
+    </p>  
+  </header>  
+  
+  <main>  
+    <section class="top-panel">  
+      <div class="mode-tabs">  
+        <button id="routeModeBtn" class="mode-tab active">通常モード</button>  
+        <button id="quizModeBtn" class="mode-tab">構造決定問題モード</button>  
+      </div>  
+  
+      <div id="routeControls">  
+        <div class="controls">  
+          <label>  
+            物質を選ぶ  
+            <select id="compoundSelect"></select>  
+          </label>  
+  
+          <label>  
+            反応タイプ  
+            <select id="typeFilter"></select>  
+          </label>  
+  
+          <button id="backBtn" class="secondary">1つ戻る</button>  
+          <button id="resetBtn" class="dark">履歴リセット</button>  
+        </div>  
+  
+        <div class="search-area">  
+          <label>  
+            物質名を検索  
+            <input id="searchInput" type="text" placeholder="例：フェノール、安息香酸、アニリン" />  
+          </label>  
+          <div id="searchResults" class="chips"></div>  
+        </div>  
+  
+        <div class="note">  
+          注意：これは高校化学・入試化学の整理用です。試薬や条件は反応関係を覚えるための概略で、実験操作の説明ではありません。  
+        </div>  
+      </div>  
+  
+      <div id="quizControls" class="hidden">  
+        <div class="note">  
+          反応条件から物質を推定する練習です。「次の問題」を押すたびに、登録済みの反応データから新しい問題が作られます。  
+        </div>  
+      </div>  
+    </section>  
+  
+    <section id="routeModeArea" class="layout">  
+      <aside class="panel">  
+        <div class="compound-card">  
+          <span id="compoundGroup" class="tag"></span>  
+          <h2 id="compoundName" class="compound-name"></h2>  
+          <span id="compoundFormula" class="formula"></span>  
+          <p id="compoundSummary" class="summary"></p>  
+          <div id="structureBox" class="structure-box"></div>  
+        </div>  
+  
+        <h3 class="small-title">直前の反応</h3>  
+        <div id="lastReactionBox" class="history">  
+          <p class="route-empty">まだ生成物へ進んでいません。</p>  
+        </div>  
+  
+        <h3 class="small-title">たどったルート</h3>  
+        <div id="historyBox" class="history">  
+          <p class="route-empty">まだ反応をたどっていません。</p>  
+        </div>  
+  
+        <h3 class="small-title">この物質の作り方</h3>  
+        <div id="incomingBox" class="history"></div>  
+      </aside>  
+  
+      <section class="panel">  
+        <h2 class="small-title">この物質からできる反応</h2>  
+        <p id="reactionCount" class="count"></p>  
+        <div id="reactionBox" class="route-box"></div>  
+  
+        <h2 class="small-title">物質一覧</h2>  
+        <div id="compoundChips" class="chips"></div>  
+      </section>  
+    </section>  
+  
+    <section id="quizModeArea" class="quiz-layout hidden">  
+      <section class="panel">  
+        <h2 class="quiz-title">構造決定問題</h2>  
+        <p id="quizNumber" class="count"></p>  
+        <div id="quizProblem"></div>  
+  
+        <div class="answer-grid" id="answerGrid"></div>  
+  
+        <div class="quiz-actions">  
+          <button id="checkAnswerBtn" class="good">答え合わせ</button>  
+          <button id="showExplanationBtn" class="secondary">解説表示</button>  
+          <button id="nextProblemBtn" class="dark">次の問題</button>  
+        </div>  
+  
+        <div id="judgeBox" class="judge-box"></div>  
+      </section>  
+  
+      <aside class="panel">  
+        <h2 class="small-title">解説</h2>  
+        <div id="explanationBox" class="explanation-box">  
+          <p class="route-empty">答え合わせ、または解説表示を押すと表示されます。</p>  
+        </div>  
+      </aside>  
+    </section>  
+  </main>  
+  
+  <script src="data.js"></script>  
+  <script src="structures.js"></script>  
+  <script src="app.js"></script>  
+</body>  
+</html>  
