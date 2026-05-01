@@ -1,3 +1,4 @@
+// VERSION: v1.4.1 クメン法修正版
 window.compounds = [  
   { id: "benzene", name: "ベンゼン", formula: "C6H6", group: "基本物質", summary: "芳香族化合物の基本となる物質。ニトロ化、スルホン化、ハロゲン化、アルキル化などで多くの化合物へ進める。" },  
   { id: "nitrobenzene", name: "ニトロベンゼン", formula: "C6H5NO2", group: "ニトロ化合物", summary: "ベンゼンをニトロ化して得られる。還元するとアニリンになる。" },  
