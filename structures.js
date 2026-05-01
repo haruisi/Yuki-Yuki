@@ -214,6 +214,15 @@ const structureSpecs = {
     { position: 0, label: "COOH", small: true },  
     { position: 3, label: "COOH", small: true }  
   ],  
+  cumene_hydroperoxide: [{ position: 0, label: "C(CH₃)₂OOH", small: true }],
+  m_xylene: [
+    { position: 0, label: "CH₃" },
+    { position: 2, label: "CH₃" }
+  ],
+  isophthalic_acid: [
+    { position: 0, label: "COOH", small: true },
+    { position: 2, label: "COOH", small: true, offsetX: 8 }
+  ],
   cumene: [{ position: 0, label: "CH(CH₃)₂", small: true }],
   acetophenone: [{ position: 0, label: "COCH₃", small: true }]  
 };  

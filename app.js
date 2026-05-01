@@ -76,6 +76,8 @@ function typeClass(type) {
     "加水分解": "type-hydrolysis",  
     "確認反応": "type-confirmation",  
     "ジアゾカップリング": "type-coupling",
+    "脱炭酸": "type-decarboxylation",
+    "酸分解": "type-acidcleavage",
     "付加": "type-addition"  
   };  
   

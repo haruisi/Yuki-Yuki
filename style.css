@@ -331,6 +331,14 @@ button.good {
   background: var(--pink);
 }
 
+.type-decarboxylation::before {
+  background: #854d0e;
+}
+
+.type-acidcleavage::before {
+  background: #9333ea;
+}
+
 .type-addition::before {
   background: #0891b2;
 }

@@ -37,7 +37,10 @@ window.compounds = [
   { id: "azo_aniline", name: "p-アミノアゾベンゼン", formula: "C6H5N=NC6H4NH2", group: "アゾ化合物", summary: "ジアゾニウム塩とアニリンのカップリングで生じる代表的なアゾ化合物。" },
   { id: "acetophenone", name: "アセトフェノン", formula: "C6H5COCH3", group: "芳香族ケトン", summary: "ベンゼン環にアセチル基 COCH3 がついた芳香族ケトン。ベンゼンのFriedel-Craftsアシル化で得られる。" },
   { id: "cyclohexane", name: "シクロヘキサン", formula: "C6H12", group: "シクロアルカン", summary: "ベンゼンに水素を付加して得られる飽和環状炭化水素。芳香族性はない。" },
-  { id: "benzene_hexachloride", name: "ベンゼンヘキサクロリド", formula: "C6H6Cl6", group: "塩素付加物", summary: "ベンゼンに塩素を付加して得られる化合物。ベンゼン環の芳香族性は失われる。" }
+  { id: "benzene_hexachloride", name: "ベンゼンヘキサクロリド", formula: "C6H6Cl6", group: "塩素付加物", summary: "別名：1,2,3,4,5,6-ヘキサクロロシクロヘキサン。ベンゼンに塩素が付加して得られる化合物。芳香族性は失われる。" },
+  { id: "cumene_hydroperoxide", name: "クメンヒドロペルオキシド", formula: "C6H5C(CH3)2OOH", group: "ヒドロペルオキシド", summary: "クメンを酸素で酸化して得られるクメン法の中間体。酸分解によりフェノールとアセトンを生じる。" },
+  { id: "m_xylene", name: "m-キシレン", formula: "m-C6H4(CH3)2", group: "芳香族炭化水素", summary: "メチル基がメタ位にあるキシレン。酸化でイソフタル酸になる。" },
+  { id: "isophthalic_acid", name: "イソフタル酸", formula: "m-C6H4(COOH)2", group: "芳香族ジカルボン酸", summary: "m-キシレンの酸化で得られる芳香族ジカルボン酸。" }
 ];  
   
 window.reactions = [  
@@ -78,8 +81,6 @@ window.reactions = [
   { from: "acetylsalicylic_acid", to: "salicylic_acid", type: "加水分解", name: "エステル結合の加水分解", reagent: "酸または塩基、水、加熱", point: "アセチル基が外れてサリチル酸側へ戻る。", exam: "アセチルサリチル酸がエステルであることの確認。" },  
   { from: "benzene", to: "toluene", type: "置換", name: "アルキル化", reagent: "CH3Cl + AlCl3 など", point: "ベンゼン環に -CH3 が入る。", exam: "トルエンから安息香酸へつながる出発点。" },  
   { from: "benzene", to: "cumene", type: "置換", name: "クメンの生成", reagent: "プロピレン、酸触媒", point: "ベンゼンにイソプロピル基を導入する。", exam: "クメン法の出発物質として問われることがある。" },  
-  { from: "cumene", to: "phenol", type: "酸化", name: "クメン法", reagent: "酸化後、酸分解", point: "クメンからフェノールとアセトンが生じる。", exam: "フェノールの工業的製法として重要。" },  
-  { from: "cumene", to: "acetone", type: "酸化", name: "クメン法の副生成物", reagent: "酸化後、酸分解", point: "フェノールと同時にアセトンが生じる。", exam: "クメン法ではフェノールとアセトンをセットで覚える。" },  
   { from: "toluene", to: "benzoic_acid", type: "酸化", name: "側鎖の酸化", reagent: "KMnO4 など", point: "メチル基が -COOH まで酸化される。", exam: "トルエン → 安息香酸は超頻出。" },  
   { from: "toluene", to: "benzyl_chloride", type: "置換", name: "側鎖の塩素化", reagent: "Cl2、光", point: "ベンゼン環ではなく側鎖のHが置換される。", exam: "Cl2 + 光なら側鎖、Cl2 + FeCl3なら環への置換。" },  
   { from: "benzyl_chloride", to: "benzyl_alcohol", type: "加水分解", name: "加水分解", reagent: "NaOH水溶液 など", point: "-CH2Cl が -CH2OH に変わる。", exam: "側鎖ハロゲン化物からアルコールへ。" },  
@@ -96,5 +97,14 @@ window.reactions = [
   { from: "p_xylene", to: "terephthalic_acid", type: "酸化", name: "側鎖の酸化", reagent: "KMnO4 など", point: "2つのメチル基がそれぞれ -COOH まで酸化される。", exam: "p-キシレン → テレフタル酸。PETとの関連でも出る。" },
   { from: "benzene", to: "acetophenone", type: "アシル化", name: "Friedel-Crafts アシル化", reagent: "CH3COCl + AlCl3", point: "ベンゼン環のHがアシル基 COCH3 に置き換わる。", exam: "アルキル化とセットで、ベンゼン環への置換反応として整理する。" },
   { from: "benzene", to: "cyclohexane", type: "付加", name: "水素付加", reagent: "H2、Niなどの触媒、高温・高圧", point: "ベンゼン環に水素が付加して、シクロヘキサンになる。", exam: "ベンゼンの通常反応は置換が中心だが、強い条件では付加反応も起こる。" },
-  { from: "benzene", to: "benzene_hexachloride", type: "付加", name: "塩素付加", reagent: "Cl2、光", point: "ベンゼンに塩素が付加して、ベンゼンヘキサクロリドになる。", exam: "Cl2 + FeCl3 は置換、Cl2 + 光 は付加として区別する。" }
+  { from: "benzene", to: "benzene_hexachloride", type: "付加", name: "塩素付加", reagent: "Cl2、光", point: "ベンゼンに塩素が付加して、ベンゼンヘキサクロリドになる。", exam: "Cl2 + FeCl3 は置換、Cl2 + 光 は付加として区別する。" },
+  { from: "cumene", to: "cumene_hydroperoxide", type: "酸化", name: "クメンの酸化", reagent: "O2", point: "クメンの側鎖が酸化され、クメンヒドロペルオキシドになる。", exam: "クメン法では、クメンを酸化してから酸分解する流れで整理する。" },
+  { from: "cumene_hydroperoxide", to: "phenol", type: "酸分解", name: "クメンヒドロペルオキシドの酸分解", reagent: "酸", point: "クメンヒドロペルオキシドが酸分解してフェノールを生じる。", exam: "クメン法でフェノールが得られる段階。" },
+  { from: "cumene_hydroperoxide", to: "acetone", type: "酸分解", name: "クメンヒドロペルオキシドの酸分解", reagent: "酸", point: "クメンヒドロペルオキシドが酸分解してアセトンも生じる。", exam: "クメン法ではフェノールとアセトンが同時に生じる。" },
+  { from: "sodium_phenoxide", to: "sodium_salicylate", type: "置換", name: "コルベ・シュミット反応", reagent: "CO2、高温・高圧", point: "ナトリウムフェノキシドのオルト位にカルボキシ基が入り、サリチル酸ナトリウムになる。", exam: "フェノールからサリチル酸へ進むときの中間段階として重要。" },
+  { from: "m_xylene", to: "isophthalic_acid", type: "酸化", name: "側鎖の酸化", reagent: "KMnO4 など", point: "2つのメチル基がそれぞれ -COOH まで酸化される。", exam: "m-キシレン → イソフタル酸。o, m, p の異性体対応を整理する。" },
+  { from: "sodium_benzoate", to: "benzene", type: "脱炭酸", name: "ソーダ石灰による脱炭酸", reagent: "NaOH、CaO、加熱", point: "安息香酸ナトリウムからカルボキシ基が外れ、ベンゼンが生じる。", exam: "カルボン酸塩から炭化水素へ戻す反応として出ることがある。" },
+  { from: "acetanilide", to: "aniline", type: "加水分解", name: "アセトアニリドの加水分解", reagent: "酸または塩基、水、加熱", point: "アセチル基が外れてアニリン側へ戻る。", exam: "アニリンのアセチル化の逆反応として整理する。" },
+  { from: "phenyl_acetate", to: "phenol", type: "加水分解", name: "酢酸フェニルの加水分解", reagent: "酸または塩基、水、加熱", point: "エステル結合が加水分解され、フェノール側へ戻る。", exam: "フェノールのアセチル化の逆反応として整理する。" },
+  { from: "acetylsalicylic_acid", result: "FeCl3水溶液で基本的に呈色しにくい", type: "確認反応", name: "塩化鉄(III)水溶液との反応", reagent: "FeCl3水溶液", point: "アセチルサリチル酸ではフェノール性ヒドロキシ基がアセチル化されているため、サリチル酸のような紫色を示しにくい。", exam: "サリチル酸とアセチルサリチル酸の識別で重要。" }
 ];  
