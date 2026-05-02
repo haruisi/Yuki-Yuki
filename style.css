@@ -426,6 +426,14 @@ button.good {
   gap: 10px;  
 }  
   
+.quiz-settings {
+  margin: 6px 0 12px;
+  display: grid;
+  grid-template-columns: minmax(180px, 280px) minmax(180px, 280px);
+  gap: 12px;
+  align-items: end;
+}
+
 .note {  
   margin-top: 12px;  
   padding: 12px 14px;  
@@ -567,5 +575,9 @@ button.good {
   .reaction-actions button {
     padding: 8px 11px;
     font-size: 13px;
+  }
+
+  .quiz-settings {
+    grid-template-columns: 1fr;
   }
 }  

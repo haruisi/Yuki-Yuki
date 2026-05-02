@@ -35,13 +35,18 @@ const checkAnswerBtn = document.getElementById("checkAnswerBtn");
 const showExplanationBtn = document.getElementById("showExplanationBtn");  
 const nextProblemBtn = document.getElementById("nextProblemBtn");  
 const judgeBox = document.getElementById("judgeBox");  
-const explanationBox = document.getElementById("explanationBox");  
+const explanationBox = document.getElementById("explanationBox");
+const difficultySelect = document.getElementById("difficultySelect");
+const quizTypeSelect = document.getElementById("quizTypeSelect");  
   
 let currentId = "benzene";  
 let history = [];  
 let lastReaction = null;  
 let currentQuizProblem = null;  
-let generatedProblemCount = 0;  
+let generatedProblemCount = 0;
+let quizDifficulty = "standard";
+let quizTypeFilter = "all";
+let currentReactionGroups = [];  
   
 const quizSymbols = ["A", "B", "C", "D"];  
   
@@ -99,6 +104,34 @@ function pickOne(array) {
   return array[Math.floor(Math.random() * array.length)];  
 }  
   
+function initQuizTypeSelect() {
+  if (!quizTypeSelect) return;
+
+  const productTypes = [
+    ...new Set(
+      reactions
+        .filter(reaction => reaction.to)
+        .map(reaction => reaction.type)
+    )
+  ];
+
+  quizTypeSelect.innerHTML = "";
+
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  allOption.textContent = "すべて";
+  quizTypeSelect.appendChild(allOption);
+
+  productTypes.forEach(type => {
+    const option = document.createElement("option");
+    option.value = type;
+    option.textContent = `${type}だけ`;
+    quizTypeSelect.appendChild(option);
+  });
+
+  quizTypeSelect.value = quizTypeFilter;
+}
+
 function initSelects() {  
   compoundSelect.innerHTML = "";  
   
@@ -190,13 +223,48 @@ function renderLastReaction() {
   `;  
 }  
   
+function getReactionGroupKey(reaction) {
+  return [
+    reaction.from,
+    reaction.type,
+    reaction.name,
+    reaction.reagent
+  ].join("||");
+}
+
+function getVisibleReactionGroups() {
+  const visibleReactions = getOutgoingReactions();
+  const groups = [];
+
+  visibleReactions.forEach(reaction => {
+    const key = getReactionGroupKey(reaction);
+    let group = groups.find(item => item.key === key);
+
+    if (!group) {
+      group = {
+        key,
+        type: reaction.type,
+        name: reaction.name,
+        reagent: reaction.reagent,
+        reactions: []
+      };
+      groups.push(group);
+    }
+
+    group.reactions.push(reaction);
+  });
+
+  return groups;
+}
+
 function renderReactions() {
   const visibleReactions = getOutgoingReactions();
   const allOutgoing = reactions.filter(reaction => reaction.from === currentId);
+  currentReactionGroups = getVisibleReactionGroups();
 
-  reactionCount.textContent = `登録済み反応：${allOutgoing.length}件 / 表示中：${visibleReactions.length}件`;
+  reactionCount.textContent = `登録済み反応：${allOutgoing.length}件 / 表示中：${currentReactionGroups.length}件`;
 
-  if (visibleReactions.length === 0) {
+  if (currentReactionGroups.length === 0) {
     reactionBox.innerHTML = `
       <p class="route-empty">
         この条件で表示できる反応はありません。
@@ -205,22 +273,29 @@ function renderReactions() {
     return;
   }
 
-  reactionBox.innerHTML = visibleReactions.map((reaction, index) => {
-    const hasProduct = Boolean(reaction.to);
+  reactionBox.innerHTML = currentReactionGroups.map((group, groupIndex) => {
+    const actionButtons = group.reactions.map((reaction, reactionIndex) => {
+      if (!reaction.to) {
+        return `<button class="secondary" disabled>観察結果</button>`;
+      }
 
-    const actionButtons = hasProduct
-      ? `<button onclick="goVisibleReaction(${index})">進む</button>`
-      : `<button class="secondary" disabled>観察結果</button>`;
+      const to = getCompound(reaction.to);
+      const label = group.reactions.length >= 2
+        ? `${escapeHTML(to.name)}へ`
+        : "進む";
+
+      return `<button onclick="goVisibleReactionGroup(${groupIndex}, ${reactionIndex})">${label}</button>`;
+    }).join("");
 
     return `
-      <article class="reaction-card ${typeClass(reaction.type)}">
+      <article class="reaction-card ${typeClass(group.type)}">
         <div class="reaction-head">
-          <span class="reaction-type">${escapeHTML(reaction.type)}</span>
-          <span class="reaction-title">${escapeHTML(reaction.name)}</span>
+          <span class="reaction-type">${escapeHTML(group.type)}</span>
+          <span class="reaction-title">${escapeHTML(group.name)}</span>
         </div>
 
         <div class="reaction-info">
-          <div><b>試薬・条件：</b>${escapeHTML(reaction.reagent)}</div>
+          <div><b>試薬・条件：</b>${escapeHTML(group.reagent)}</div>
         </div>
 
         <div class="reaction-actions">
@@ -320,6 +395,16 @@ function renderRouteMode() {
   renderSearchResults();  
 }  
   
+function goVisibleReactionGroup(groupIndex, reactionIndex) {
+  const group = currentReactionGroups[groupIndex];
+  if (!group) return;
+
+  const reaction = group.reactions[reactionIndex];
+  if (!reaction || !reaction.to) return;
+
+  moveToCompound(reaction.to, reaction);
+}
+
 function goVisibleReaction(index) {  
   const visibleReactions = getOutgoingReactions();  
   const reaction = visibleReactions[index];  
@@ -357,10 +442,12 @@ function switchMode(mode) {
   }  
 }  
   
-function getProductReactions() {  
-  return reactions.filter(reaction => {  
-    return reaction.to && compoundMap.has(reaction.from) && compoundMap.has(reaction.to);  
-  });  
+function getProductReactions() {
+  return reactions.filter(reaction => {
+    const hasValidProduct = reaction.to && compoundMap.has(reaction.from) && compoundMap.has(reaction.to);
+    const matchesType = quizTypeFilter === "all" || reaction.type === quizTypeFilter;
+    return hasValidProduct && matchesType;
+  });
 }  
   
 function makeAnswerOptions(answerId) {  
@@ -393,42 +480,88 @@ function makeAnswerOptions(answerId) {
   return shuffleArray(unique);  
 }  
   
-function buildRandomReactionPath() {  
-  const productReactions = getProductReactions();  
-  const shuffledFirstReactions = shuffleArray(productReactions);  
-  
-  for (const firstReaction of shuffledFirstReactions) {  
-    const path = [firstReaction];  
-    const usedCompounds = new Set([firstReaction.from, firstReaction.to]);  
-  
-    const targetLength = Math.random() < 0.55 ? 3 : 2;  
-    let currentCompoundId = firstReaction.to;  
-  
-    for (let i = 1; i < targetLength; i++) {  
-      const nextCandidates = productReactions.filter(reaction => {  
-        return reaction.from === currentCompoundId && !usedCompounds.has(reaction.to);  
-      });  
-  
-      if (nextCandidates.length === 0) {  
-        break;  
-      }  
-  
-      const nextReaction = pickOne(nextCandidates);  
-  
-      path.push(nextReaction);  
-      usedCompounds.add(nextReaction.to);  
-      currentCompoundId = nextReaction.to;  
-    }  
-  
-    if (path.length >= 2) {  
-      return path;  
-    }  
-  }  
-  
-  return [  
-    reactions.find(reaction => reaction.from === "benzene" && reaction.to === "nitrobenzene"),  
-    reactions.find(reaction => reaction.from === "nitrobenzene" && reaction.to === "aniline")  
-  ].filter(Boolean);  
+function getTargetPathLength() {
+  if (quizDifficulty === "basic") {
+    return 1;
+  }
+
+  if (quizDifficulty === "standard") {
+    return 2;
+  }
+
+  if (quizDifficulty === "advanced") {
+    return 3;
+  }
+
+  return pickOne([1, 2, 3]);
+}
+
+function getDifficultyLabel() {
+  const labels = {
+    basic: "基本：1段階",
+    standard: "標準：2段階",
+    advanced: "発展：3段階",
+    random: "ランダム：1〜3段階"
+  };
+
+  return labels[quizDifficulty] || labels.standard;
+}
+
+function getQuizTypeLabel() {
+  if (quizTypeFilter === "all") {
+    return "すべて";
+  }
+
+  return `${quizTypeFilter}だけ`;
+}
+
+function buildRandomReactionPath() {
+  let productReactions = getProductReactions();
+
+  if (productReactions.length === 0) {
+    quizTypeFilter = "all";
+    productReactions = getProductReactions();
+    if (quizTypeSelect) {
+      quizTypeSelect.value = "all";
+    }
+  }
+
+  const targetLength = getTargetPathLength();
+
+  for (let fallbackLength = targetLength; fallbackLength >= 1; fallbackLength--) {
+    const shuffledFirstReactions = shuffleArray(productReactions);
+
+    for (const firstReaction of shuffledFirstReactions) {
+      const path = [firstReaction];
+      const usedCompounds = new Set([firstReaction.from, firstReaction.to]);
+
+      let currentCompoundId = firstReaction.to;
+
+      for (let i = 1; i < fallbackLength; i++) {
+        const nextCandidates = productReactions.filter(reaction => {
+          return reaction.from === currentCompoundId && !usedCompounds.has(reaction.to);
+        });
+
+        if (nextCandidates.length === 0) {
+          break;
+        }
+
+        const nextReaction = pickOne(nextCandidates);
+
+        path.push(nextReaction);
+        usedCompounds.add(nextReaction.to);
+        currentCompoundId = nextReaction.to;
+      }
+
+      if (path.length === fallbackLength) {
+        return path;
+      }
+    }
+  }
+
+  return [
+    reactions.find(reaction => reaction.from === "benzene" && reaction.to === "nitrobenzene")
+  ].filter(Boolean);
 }  
   
 function generateRandomProblem() {  
@@ -462,7 +595,7 @@ function generateRandomProblem() {
   });  
   
   return {  
-    title: "ランダム反応ルート問題",  
+    title: `ランダム反応ルート問題（${getDifficultyLabel()}｜${getQuizTypeLabel()}）`,  
     clues,  
     answers,  
     explanation  
@@ -476,7 +609,7 @@ function renderQuiz() {
   
   const problem = currentQuizProblem;  
   
-  quizNumber.textContent = `ランダム生成問題 ${generatedProblemCount + 1}`;  
+  quizNumber.textContent = `ランダム生成問題 ${generatedProblemCount + 1}｜${getDifficultyLabel()}｜${getQuizTypeLabel()}`;  
   
   quizProblem.innerHTML = `  
     <h3 class="quiz-title">${escapeHTML(problem.title)}</h3>  
@@ -652,7 +785,21 @@ quizModeBtn.addEventListener("click", () => switchMode("quiz"));
   
 checkAnswerBtn.addEventListener("click", checkQuizAnswer);  
 showExplanationBtn.addEventListener("click", () => renderExplanation(true));  
-nextProblemBtn.addEventListener("click", nextProblem);  
+nextProblemBtn.addEventListener("click", nextProblem);
+
+quizTypeSelect.addEventListener("change", () => {
+  quizTypeFilter = quizTypeSelect.value;
+  currentQuizProblem = generateRandomProblem();
+  generatedProblemCount += 1;
+  renderQuiz();
+});
+
+difficultySelect.addEventListener("change", () => {
+  quizDifficulty = difficultySelect.value;
+  currentQuizProblem = generateRandomProblem();
+  generatedProblemCount += 1;
+  renderQuiz();
+});  
   
 initSelects();  
 currentQuizProblem = generateRandomProblem();  

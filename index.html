@@ -3,13 +3,13 @@
 <head>  
   <meta charset="UTF-8" />  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
-  <title>芳香族化合物 反応ルート v1.4.1</title>  
-  <link rel="stylesheet" href="style.css?v=1.4.1" />  
+  <title>芳香族化合物 反応ルート v1.6</title>  
+  <link rel="stylesheet" href="style.css?v=1.6" />  
 </head>  
   
 <body>  
   <header>  
-    <h1>芳香族化合物 反応ルート v1.4.1</h1>  
+    <h1>芳香族化合物 反応ルート v1.6</h1>  
     <p>  
       物質を選ぶと、その物質から進める反応だけを表示します。  
       構造決定問題モードでは、登録済み反応データからランダム問題を生成します。  
@@ -52,9 +52,27 @@
         </div>  
       </div>  
   
-      <div id="quizControls" class="hidden">  
+      <div id="quizControls" class="hidden">
+        <div class="quiz-settings">
+          <label>
+            難易度
+            <select id="difficultySelect">
+              <option value="basic">基本：1段階</option>
+              <option value="standard" selected>標準：2段階</option>
+              <option value="advanced">発展：3段階</option>
+              <option value="random">ランダム：1〜3段階</option>
+            </select>
+          </label>
+
+          <label>
+            出題範囲
+            <select id="quizTypeSelect"></select>
+          </label>
+        </div>
+
+  
         <div class="note">  
-          反応条件から物質を推定する練習です。「次の問題」を押すたびに、登録済みの反応データから新しい問題が作られます。  
+          反応条件から物質を推定する練習です。「次の問題」を押すたびに、選んだ難易度・出題範囲に合わせて新しい問題が作られます。  
         </div>  
       </div>  
     </section>  
@@ -119,8 +137,8 @@
     </section>  
   </main>  
   
-  <script src="data.js?v=1.4.1"></script>  
-  <script src="structures.js?v=1.4.1"></script>  
-  <script src="app.js?v=1.4.1"></script>  
+  <script src="data.js?v=1.6"></script>  
+  <script src="structures.js?v=1.6"></script>  
+  <script src="app.js?v=1.6"></script>  
 </body>  
 </html>  
